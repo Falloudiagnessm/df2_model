@@ -183,7 +183,7 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     sm = ScalarMappable(cmap=plt.cm.Reds, norm=norm)
     sm.set_array([])  # Not needed, but necessary to avoid a warning
     cbar = plt.colorbar(sm, ax=ax)
-    cbar.set_label('Infection Cases')
+    cbar.set_label('Cas infectées')
  
     for arrondissement, color in [(selected_arrondissements[0], color1_data), (selected_arrondissements[1], color2_data)]:
         arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == arrondissement)]
