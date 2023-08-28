@@ -179,7 +179,7 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     arrondissement2_data.plot(ax=ax, color=color2_data )
     
     # Add a colorbar legend
-    norm = Normalize(vmin=min(infectes_zone_1), vmax=max(infectes_zone_1))
+    norm = Normalize(vmin=min(infectes_zone_1), vmax=max(infectes_zone_2))
     sm = ScalarMappable(cmap=plt.cm.Reds, norm=norm)
     sm.set_array([])  # Not needed, but necessary to avoid a warning
     cbar = plt.colorbar(sm, ax=ax)
