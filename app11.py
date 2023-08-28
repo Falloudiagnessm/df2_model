@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 import geopandas as gpd
 from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.colors import ListedColormap, Normalize
+from matplotlib.colors import Normalize
 from matplotlib.cm import ScalarMappable
 
 # sudo sysctl fs.inotify.max_user_watches=1000000
@@ -178,7 +178,15 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     arrondissement1_data.plot(ax=ax, color=color1_data )
     arrondissement2_data.plot(ax=ax, color=color2_data )
     
+    # Add a colorbar legend
+    norm = Normalize(vmin=min(infectes_zone_1), vmax=max(infectes_zone_2))
+    sm = ScalarMappable(cmap=plt.cm.Reds, norm=norm)
+    sm.set_array([])  # Not needed, but necessary to avoid a warning
+    cbar = plt.colorbar(sm, ax=ax)
+    cbar.set_label('Infection Cases')
+    
  
+    
     # Afficher la carte à l'aide de Matplotlib dans Streamlit
     st.pyplot(fig)
 
