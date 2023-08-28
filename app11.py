@@ -187,9 +187,7 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     
  
     
-    # Afficher la carte à l'aide de Matplotlib dans Streamlit
-    st.pyplot(fig)
-
+  
     
  
     for arrondissement, color in [(selected_arrondissements[0], color1_data), (selected_arrondissements[1], color2_data)]:
