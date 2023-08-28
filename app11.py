@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 import geopandas as gpd
 from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.colors import Normalize
+from matplotlib.colors import ListedColormap, Normalize
 from matplotlib.cm import ScalarMappable
 
 # sudo sysctl fs.inotify.max_user_watches=1000000
@@ -172,18 +172,47 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     st.write("les codes couleurs suivant le nombre de cas infecté pour zone 1")
     st.write(color1_data)
     st.write("les codes couleurs suivant le nombre de cas infecté pour zone 2")
-    st.write(color2_data)
+    #st.write(color2_data)
     # Affichage de la carte avec GeoPandas
     
-    arrondissement1_data.plot(ax=ax, color=color1_data )
-    arrondissement2_data.plot(ax=ax, color=color2_data )
+    #arrondissement1_data.plot(ax=ax, color=color1_data )
+    #arrondissement2_data.plot(ax=ax, color=color2_data )
     
     # Add a colorbar legend
+    #norm = Normalize(vmin=min(infectes_zone_1), vmax=max(infectes_zone_2))
+    #sm = ScalarMappable(cmap=plt.cm.Reds, norm=norm)
+    #sm.set_array([])  # Not needed, but necessary to avoid a warning
+    #cbar = plt.colorbar(sm, ax=ax)
+    #cbar.set_label('Infection Cases')
+    
+ 
+    # Créer une colormap personnalisée
+    cmap = ListedColormap(color1_data+color2_data)  # Vous pouvez ajuster  
+
+    # Créer une Normalize pour les valeurs d'infections
     norm = Normalize(vmin=min(infectes_zone_1), vmax=max(infectes_zone_2))
-    sm = ScalarMappable(cmap=plt.cm.Reds, norm=norm)
-    sm.set_array([])  # Not needed, but necessary to avoid a warning
+
+    # Créer un objet ScalarMappable avec la colormap et la Normalize
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+    sm.set_array([])  # Pas nécessaire, mais évite un avertissement
+
+    # Créer la carte GeoPandas
+    #fig, ax = plt.subplots(figsize=(10, 10))
+
+    # Afficher le GeoDataFrame pour la première zone avec la couleur basée sur les infectés de la zone 1
+    arrondissement1_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_1], legend=True)
+
+    # Afficher le GeoDataFrame pour la deuxième zone avec la couleur basée sur les infectés de la zone 2
+    arrondissement2_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_2], legend=True)
+
+    # Ajouter une barre de couleur (colorbar) pour indiquer les valeurs d'infections
     cbar = plt.colorbar(sm, ax=ax)
-    cbar.set_label('Cas infectées')
+    cbar.set_label('Infection Cases')
+
+    # Afficher la carte à l'aide de Matplotlib dans Streamlit
+    st.pyplot(fig)
+
+    
  
     for arrondissement, color in [(selected_arrondissements[0], color1_data), (selected_arrondissements[1], color2_data)]:
         arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == arrondissement)]
