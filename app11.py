@@ -180,7 +180,7 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
 
     # Créer un objet ScalarMappable avec la colormap et la Normalize
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    breakpoints = [min(infectes_zone_1), min(infectes_zone_1)+1, min(infectes_zone_1)+50, min(infectes_zone_1)+120, min(infectes_zone_1)+200,min(infectes_zone_1)+300, 500]
+    breakpoints = [min(infectes_zone_1), min(infectes_zone_1)+50, min(infectes_zone_1)+100, min(infectes_zone_1)+150, min(infectes_zone_1)+200,min(infectes_zone_1)+300, 500]
     norm_a_personnaliser = BoundaryNorm(breakpoints, cmap_bar.N)
     sm_bar = plt.cm.ScalarMappable(cmap=cmap_bar, norm=norm_a_personnaliser)
  
