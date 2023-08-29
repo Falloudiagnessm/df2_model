@@ -190,13 +190,15 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     # Parcourir les arrondissements sélectionnés
     for idx, selected_arrondissement in enumerate(selected_arrondissements):
          arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == selected_arrondissement)]
-         
+    
          # Sélectionner les couleurs en fonction de la zone
          if idx == 0:
             arrondissement_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_1], legend=False)
          else :
             arrondissement_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_2], legend=False)
-       
+    if selected_arrondissements==[]:
+         st.write("veuiller selectionner deux zone à etudier")
+ 
          
  
     
