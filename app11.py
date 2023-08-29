@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import odeint
 import geopandas as gpd
 from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.colors import Normalize
+from matplotlib.colors import Normalize , ListedColormap,BoundaryNorm
 from matplotlib.cm import ScalarMappable
 
 # sudo sysctl fs.inotify.max_user_watches=1000000
@@ -112,42 +112,9 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
 
     # Show the plots
     st.pyplot()
-
-
-
-
-    st.subheader("Affichage de la carte d'infection")
- 
-
-    # Chargement du fichier Shapefile avec GeoPandas
-    @st.cache_data
-    def load_shapefile(shapefile_path):
-        return gpd.read_file(shapefile_path)
-
-    shapefile_path = "SEN_adm3.shp"
-    gdf = load_shapefile(shapefile_path)
-
-    # Liste des arrondissements uniques dans le jeu de données de Thies
-    thies_arrondissements = gdf[gdf['NAME_1'] == 'Thiès']['NAME_3'].unique()
- 
-
-    # Sélection des deux arrondissements à afficher
-    selected_arrondissements = st.selectbox("Sélectionnez le premier arrondissement", thies_arrondissements),      st.selectbox("Sélectionnez le deuxième arrondissement", thies_arrondissements)
-
-    # Création de la carte avec GeoPandas
     
-    st.title("Carte des arrondissements de Thies")
-    
-    fig, ax = plt.subplots()
- 
-    gdf[gdf['NAME_1'] == 'Thiès'].plot(ax=ax, color='gray')  # Rendre les autres arrondissements en gris par défaut
-
-    # Filtrer les données pour les arrondissements sélectionnés
-    arrondissement1_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == selected_arrondissements[0])]
-    arrondissement2_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == selected_arrondissements[1])]
-
     # Création d'un DataFrame à partir des données de la simulation (simulation fictive)
-    # Création d'un DataFrame à partir des données de la simulation
+ 
     results_df = pd.DataFrame({'Temps': t, 'Infectés I1 Zone1': u[:, 2], 'Infectés I2 Zone1': u[:, 3], 'Infectés I1 Zone2':u[:, 10],'Infectés I2 Zone2': u[:, 11]})
     st.write(" affichage du dataframe")
     st.write(results_df)
@@ -173,23 +140,78 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     st.write(color1_data)
     st.write("les codes couleurs suivant le nombre de cas infecté pour zone 2")
     st.write(color2_data)
-    # Affichage de la carte avec GeoPandas
-    
-    arrondissement1_data.plot(ax=ax, color=color1_data )
-    arrondissement2_data.plot(ax=ax, color=color2_data )
-    
-    # Add a colorbar legend
-    norm = Normalize(vmin=min(infectes_zone_1), vmax=max(infectes_zone_2))
-    sm = ScalarMappable(cmap=plt.cm.Reds, norm=norm)
-    sm.set_array([])  # Not needed, but necessary to avoid a warning
-    cbar = plt.colorbar(sm, ax=ax)
-    cbar.set_label('Infection Cases')
-    
- 
-    
   
+  
+  
+
+
+
+    st.subheader("Affichage de la carte d'infection")
+ 
+
+    # Chargement du fichier Shapefile avec GeoPandas
+    @st.cache_data
+    def load_shapefile(shapefile_path):
+        return gpd.read_file(shapefile_path)
+
+    shapefile_path = "SEN_adm3.shp"
+    gdf = load_shapefile(shapefile_path)
+
+    # Liste des arrondissements uniques dans le jeu de données de Thies
+    thies_arrondissements = gdf[gdf['NAME_1'] == 'Thiès']['NAME_3'].unique()
+ 
+    fig, ax = plt.subplots()
+ 
+    gdf[gdf['NAME_1'] == 'Thiès'].plot(ax=ax, color='gray')  # Rendre les autres arrondissements en gris par défaut
+
+    # Sélection des deux arrondissements à afficher
+    #elected_arrondissements = st.selectbox("Sélectionnez le premier arrondissement", thies_arrondissements),      st.selectbox("Sélectionnez le deuxième arrondissement", thies_arrondissements)
+     
+    # Sélection des arrondissements à afficher
+    selected_arrondissements = st.multiselect("Sélectionnez les arrondissements", thies_arrondissements)
+    # Créer une colormap personnalisée
+    cmap_bar = ListedColormap(["#000000","#330000","#660000","#990000","#CC0000","#FF0000"]) 
+ 
+    cmap = ListedColormap(color1_data+color2_data)
+ 
+ 
+    # Créer une Normalize pour les valeurs d'infections
+    norm = Normalize(vmin=min(infectes_zone_1), vmax=max(infectes_zone_2))
+
+    # Créer un objet ScalarMappable avec la colormap et la Normalize
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+    breakpoints = [min(infectes_zone_1), min(infectes_zone_1)+1, min(infectes_zone_1)+50, min(infectes_zone_1)+120, min(infectes_zone_1)+200,min(infectes_zone_1)+300, 500]
+    norm_a_personnaliser = BoundaryNorm(breakpoints, cmap_bar.N)
+    sm_bar = plt.cm.ScalarMappable(cmap=cmap_bar, norm=norm_a_personnaliser)
+ 
+ 
+    sm.set_array([]) # Pas nécessaire, mais évite un avertissement
+     
+    # Parcourir les arrondissements sélectionnés
+    for idx, selected_arrondissement in enumerate(selected_arrondissements):
+         arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == selected_arrondissement)]
+         
+         # Sélectionner les couleurs en fonction de la zone
+         if idx == 0:
+            arrondissement_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_1], legend=False)
+         else :
+            arrondissement_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_2], legend=False)
+       
+         
+ 
     
  
+    # Ajouter une barre de couleur (colorbar) pour indiquer les valeurs d'infections
+    cbar = plt.colorbar(sm_bar, ax=ax)
+    cbar.set_label('Infection Cases')
+
+    # Création de la carte avec GeoPandas
+    
+    st.title("Carte des arrondissements de Thies")
+    
+ 
+
+   
     for arrondissement, color in [(selected_arrondissements[0], color1_data), (selected_arrondissements[1], color2_data)]:
         arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == arrondissement)]
         x = arrondissement_data.geometry.centroid.x.values[0]
