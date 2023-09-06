@@ -120,35 +120,29 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     st.write(results_df)
     infectes_zone_1 = results_df['Infectés I1 Zone1']+results_df['Infectés I2 Zone1']
     infectes_zone_2 = results_df['Infectés I1 Zone2']+results_df['Infectés I2 Zone2']
-    st.write("somme des colonne infectées de la zone 1")
-    st.write(infectes_zone_1)
-    st.write("somme des colonne infectées de la zone 2")
-    st.write(infectes_zone_2)
+    #st.write("somme des colonne infectées de la zone 1")
+    #st.write(infectes_zone_1)
+    #st.write("somme des colonne infectées de la zone 2")
+    #st.write(infectes_zone_2)
  
-    st.write("données apres normalisation pour zone 1")
+    #st.write("données apres normalisation pour zone 1")
     val1=[(infectes_zone_1[j]-min(infectes_zone_1))/(max(infectes_zone_1)-min(infectes_zone_1)) for j in range(len(infectes_zone_1))]
-    st.write(val1)
-    st.write("données apres normalisation pour zone 2")
+    #st.write(val1)
+    #st.write("données apres normalisation pour zone 2")
     val2=[(infectes_zone_2[j]-min(infectes_zone_2))/(max(infectes_zone_2)-min(infectes_zone_2)) for j in range(len(infectes_zone_2))]
-    st.write(val2)
+    #st.write(val2)
     
     
     # Créer les couleurs basées sur le nombre d'infectés
     color1_data = [f'#{int(v * 255):02X}0000' for v in val1]
     color2_data = [f'#{int(v * 255):02X}0000' for v in val2]
-    st.write("les codes couleurs suivant le nombre de cas infecté pour zone 1")
-    st.write(color1_data)
-    st.write("les codes couleurs suivant le nombre de cas infecté pour zone 2")
-    st.write(color2_data)
-  
-  
-  
-
-
-
+    #st.write("les codes couleurs suivant le nombre de cas infecté pour zone 1")
+    #st.write(color1_data)
+    #st.write("les codes couleurs suivant le nombre de cas infecté pour zone 2")
+    #st.write(color2_data)
+ 
     st.subheader("Affichage de la carte d'infection")
  
-
     # Chargement du fichier Shapefile avec GeoPandas
     @st.cache_data
     def load_shapefile(shapefile_path):
@@ -168,9 +162,10 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
     #elected_arrondissements = st.selectbox("Sélectionnez le premier arrondissement", thies_arrondissements),      st.selectbox("Sélectionnez le deuxième arrondissement", thies_arrondissements)
      
     # Sélection des arrondissements à afficher
-    selected_arrondissements = st.multiselect("Sélectionnez les arrondissements", thies_arrondissements)
+    selected_arrondissements = st.multiselect("Sélectionnez les arrondissements", thies_arrondissements,default=["Fissel","Sessene"])
     # Créer une colormap personnalisée
-    cmap_bar = ListedColormap(["#000000","#330000","#660000","#990000","#CC0000","#FF0000"]) 
+    cmap_bar = ListedColormap(["#FF0000","#CC0000","#BB0000","#990000","#660000" ])
+    #cmap_bar = ListedColormap(["#CC0000","#FF0000"])  
  
     cmap = ListedColormap(color1_data+color2_data)
  
@@ -180,26 +175,27 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
 
     # Créer un objet ScalarMappable avec la colormap et la Normalize
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
-    breakpoints = [min(infectes_zone_1), min(infectes_zone_1)+50, min(infectes_zone_1)+100, min(infectes_zone_1)+150, min(infectes_zone_1)+200,min(infectes_zone_1)+300, 500]
+    #breakpoints = [0,min(infectes_zone_1)+165,min(infectes_zone_1)+330,500]
+    max_value =max(infectes_zone_2)
+    breakpoints = [0,min(infectes_zone_1)+100,min(infectes_zone_1)+200,min(infectes_zone_1)+300,max_value  + 1]
     norm_a_personnaliser = BoundaryNorm(breakpoints, cmap_bar.N)
-    sm_bar = plt.cm.ScalarMappable(cmap=cmap_bar, norm=norm_a_personnaliser)
+    sm_bar = plt.cm.ScalarMappable(cmap=cmap_bar, norm = norm_a_personnaliser)
  
  
     sm.set_array([]) # Pas nécessaire, mais évite un avertissement
-     
+  
     # Parcourir les arrondissements sélectionnés
     for idx, selected_arrondissement in enumerate(selected_arrondissements):
          arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == selected_arrondissement)]
-    
+         
          # Sélectionner les couleurs en fonction de la zone
          if idx == 0:
-            arrondissement_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_1], legend=False)
+            arrondissement_data.plot(ax=ax, color="#FF0000", legend=True)
          else :
-            arrondissement_data.plot(ax=ax, color=[sm.to_rgba(val) for val in infectes_zone_2], legend=False)
+            arrondissement_data.plot(ax=ax, color="#660000", legend=True)
+       
     if selected_arrondissements==[]:
-         st.write("veuiller selectionner deux zone à etudier")
- 
-         
+        st.write("veuiller selectionner deux zone à etudier")
  
     
  
