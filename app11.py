@@ -192,7 +192,7 @@ def model_diffusion(Initial1,Initial2,epsilon, r_1, r_2, K_R, alpha, beta_1, bet
   
     # Ajouter une barre de couleur (colorbar) pour indiquer les valeurs d'infections
     cbar = plt.colorbar(sm_bar, ax=ax, format='%d')
-    cbar.set_label('Infection Cases')
+    cbar.set_label('Nombres de cas infecés')
 
     # Add a "+" sign after the last value in the legend
     # Add a "+" sign to all values in the colorbar
