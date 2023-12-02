@@ -23,7 +23,7 @@ import plotly.express as px
 
 # sudo sysctl fs.inotify.max_user_watches=1000000
 # Augmenter la limite à 300 Mo (vous pouvez ajuster cette valeur)
-st.set_option('server.maxMessageSize', 500)
+#st.set_option('server.maxMessageSize', 500)
 
 #py.init_notebook_mode(connected=True)
 
