@@ -23,7 +23,8 @@ import plotly.express as px
 
 # sudo sysctl fs.inotify.max_user_watches=1000000
 # Augmenter la limite à 300 Mo (vous pouvez ajuster cette valeur)
-#st.set_option('server.maxMessageSize', 500)
+#
+#st.set_option('server.maxMessageSize', 300)
 
 #py.init_notebook_mode(connected=True)
 
@@ -78,18 +79,26 @@ if choose == "Accueil" :
         st.markdown('<p class="font">Accueil</p>', unsafe_allow_html=True)        
         st.markdown("""
         Dans le cadre de notre etude, nous avons exploré la puissance de Streamlit,
-	un framework Python, pour créer rapidement une application interactive pour notre etude sur la modélisation
-	 de la transmission de la peste entre rongeurs et puces pour les trois trois zones ciblées. Cette démarche
-	a permis de simplifier le processus de développement, permettant ainsi aux développeurs de
-	concevoir des applications web complexes en seulement quelques lignes de code.
-	Notre objectif principal était de modéliser la transmission de la peste dans trois zones géo-
-	graphiques distinctes, en utilisant un modèle mathématique approprié. Les trois principales
-	étapes de ce projet sont resumées comme suit :""")
+        un framework Python, pour créer rapidement une application interactive pour notre etude sur la modélisation
+         de la transmission de la peste entre rongeurs et puces pour les trois trois zones ciblées. Cette démarche
+        a permis de simplifier le processus de développement, permettant ainsi aux développeurs de
+        concevoir des applications web complexes en seulement quelques lignes de code.
+        Notre objectif principal était de modéliser la transmission de la peste dans trois zones géo-
+        graphiques distinctes, en utilisant un modèle mathématique approprié. Les trois principales
+        étapes de ce projet sont resumées comme suit :""")
         st.subheader('Traitement du modèle')
         st.markdown(""" Nous avons commencé par définir un modèle mathéma-
-	tique représentant la dynamique des populations et la propagation des rongeurs infectés
-	dans les différentes zones. Ce modèle était basé sur des équations différentielles ordi-
-	naires (EDO) et des données réelles ou estimées pour les paramètres """)
+        tique représentant la dynamique des populations et la propagation des rongeurs infectés
+        dans les différentes zones. Ce modèle était basé sur des équations différentielles ordi
+        naires (EDO) et des données réelles ou estimées pour les paramètres. """)
+        #import image
+        image_path = "zone1.png"   
+        st.image(image_path, caption='Dynamique du modèle dans la zone 1', use_column_width=True)
+        image_path = "zone2.png"   
+        st.image(image_path, caption='Dynamique du modèle dans la zone 2', use_column_width=True)
+        image_path = "zone3.png"   
+        st.image(image_path, caption='Dynamique du modèle dans la zone 3', use_column_width=True)
+
         st.subheader('Utilisation des API de streamlit')
         st.markdown(""" Ensuite, nous avons exploité les API de Streamlit pour créer une interface utilisateur 
         interactive. Les utilisateurs peuvent désormais ajuster les paramètres du modèle, lancer des simulations et 
@@ -201,7 +210,7 @@ if choose == "modèle":
 
 
         # Sélection des arrondissements à afficher
-        selected_arrondissements = st.multiselect("Sélectionnez les arrondissements", thies_arrondissements,default=["Fissel","Sessene","Pambal"])
+        selected_arrondissements = st.multiselect("Sélectionnez les arrondissements", thies_arrondissements,default=["Fissel","Sessene","Sindia"])
         #arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == selected_arrondissement)]
   
        
@@ -449,8 +458,8 @@ if choose == "modèle":
             f'{selected_arrondissements[2]}': u[:, 18] + u[:, 19],
         })
 
-        st.write("Affichage du dataframe")
-        st.write(df)
+        #st.write("Affichage du dataframe")
+        #st.write(df)
 
         # Chargement du fichier Shapefile avec GeoPandas
  
@@ -471,14 +480,14 @@ if choose == "modèle":
             animation_frame='temps',
             color_continuous_scale='reds',
             mapbox_style="open-street-map",
-            title='Infections par commune au fil du temps',
+            title='Nombres d infectées des rongeurs par arrondissement au fil du temps',
             labels={'Infections': 'Nombre d\'infections'},
             center={"lat": gdf_merged['geometry'].centroid.y.mean(), "lon": gdf_merged['geometry'].centroid.x.mean()}
         )
 
         # Afficher la carte
-         
-        st.plotly_chart(fig)
+        fig.show() 
+        #st.plotly_chart(fig)
 
 
 
@@ -494,7 +503,7 @@ if choose == "modèle":
 
     #Initial1 = [500, 0, 50, 70, 10, 20, 60, 80]
     #Initial2 = [ 0, 500, 0, 0, 0, 0, 0, 0]
-    temps_final = st.sidebar.slider("temps_final", 0.0, 1000.0, 50.0)
+    temps_final = st.sidebar.slider("temps_final", 0.0, 1000.0, 70.0)
     temps_final = st.sidebar.number_input("temps_final", min_value=0.0, max_value=1000.0, value=temps_final)
     # Champ de saisie pour les valeurs initiales
     Initial1 = st.sidebar.text_input('Population initiale zone 1 (S1,S2,I1,I2,A1,A2,L1,L2)', value="500,0,50,70,10,20,60,80")
