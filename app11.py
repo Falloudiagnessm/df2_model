@@ -22,7 +22,8 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 
 # sudo sysctl fs.inotify.max_user_watches=1000000
-
+# Augmenter la limite à 300 Mo (vous pouvez ajuster cette valeur)
+st.set_option('server.maxMessageSize', 500)
 
 #py.init_notebook_mode(connected=True)
 
@@ -431,7 +432,16 @@ if choose == "modèle":
         # Création d'un DataFrame à partir des données de la simulation (simulation fictive)
 
         #selected_arrondissements = ['arr1', 'arr2', 'arr3']
+        # Chargement du fichier Shapefile avec GeoPandas
+        @st.cache_data
+        def load_shapefile(shapefile_path):
+            return gpd.read_file(shapefile_path)
 
+        shapefile_path = "SEN_adm3.shp"
+        gdf = load_shapefile(shapefile_path)
+
+        # Liste des arrondissements uniques dans le jeu de données de Thies
+        thies_arrondissements = gdf[gdf['NAME_1'] == 'Thiès']['NAME_3'].unique()
         df = pd.DataFrame({
             'temps': t,
             f'{selected_arrondissements[0]}': u[:, 2] + u[:, 3],
@@ -467,7 +477,8 @@ if choose == "modèle":
         )
 
         # Afficher la carte
-        fig.show()
+         
+        st.plotly_chart(fig)
 
 
 
@@ -483,7 +494,7 @@ if choose == "modèle":
 
     #Initial1 = [500, 0, 50, 70, 10, 20, 60, 80]
     #Initial2 = [ 0, 500, 0, 0, 0, 0, 0, 0]
-    temps_final = st.sidebar.slider("temps_final", 0.0, 1000.0, 100.0)
+    temps_final = st.sidebar.slider("temps_final", 0.0, 1000.0, 10.0)
     temps_final = st.sidebar.number_input("temps_final", min_value=0.0, max_value=1000.0, value=temps_final)
     # Champ de saisie pour les valeurs initiales
     Initial1 = st.sidebar.text_input('Population initiale zone 1 (S1,S2,I1,I2,A1,A2,L1,L2)', value="500,0,50,70,10,20,60,80")
