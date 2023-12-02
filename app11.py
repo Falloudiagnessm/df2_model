@@ -494,7 +494,7 @@ if choose == "modèle":
 
     #Initial1 = [500, 0, 50, 70, 10, 20, 60, 80]
     #Initial2 = [ 0, 500, 0, 0, 0, 0, 0, 0]
-    temps_final = st.sidebar.slider("temps_final", 0.0, 1000.0, 10.0)
+    temps_final = st.sidebar.slider("temps_final", 0.0, 1000.0, 50.0)
     temps_final = st.sidebar.number_input("temps_final", min_value=0.0, max_value=1000.0, value=temps_final)
     # Champ de saisie pour les valeurs initiales
     Initial1 = st.sidebar.text_input('Population initiale zone 1 (S1,S2,I1,I2,A1,A2,L1,L2)', value="500,0,50,70,10,20,60,80")
