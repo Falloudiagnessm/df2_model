@@ -458,7 +458,7 @@ if choose == "modèle":
             f'{selected_arrondissements[2]}': u[:, 18] + u[:, 19],
         })
 
-        #st.write("Affichage du dataframe")
+        st.write("Nombres d\' infection de rongeurs pour chaque zone en fonction du temps")
         #st.write(df)
 
         # Chargement du fichier Shapefile avec GeoPandas
@@ -480,7 +480,7 @@ if choose == "modèle":
             animation_frame='temps',
             color_continuous_scale='reds',
             mapbox_style="open-street-map",
-            title='Nombres d infectées des rongeurs par arrondissement au fil du temps',
+            title='Nombres d\'infectées des rongeurs par arrondissement au fil du temps',
             labels={'Infections': 'Nombre d\'infections'},
             center={"lat": gdf_merged['geometry'].centroid.y.mean(), "lon": gdf_merged['geometry'].centroid.x.mean()}
         )
@@ -496,7 +496,7 @@ if choose == "modèle":
             f'{selected_arrondissements[2]}': u[:, 22] + u[:, 23],
         })
 
-        st.write("Affichage du dataframe")
+        st.write("Nombres de puces libres infectueuses par arrondissement au fil du temps")
         st.write(df1)
 
         # Chargement du fichier Shapefile avec GeoPandas
