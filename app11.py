@@ -488,8 +488,44 @@ if choose == "modèle":
         # Afficher la carte
         #fig.show() 
         st.plotly_chart(fig)
+        ############################## Pour les puces libre infectueuses ######################
+        df1 = pd.DataFrame({
+            'temps': t,
+            f'{selected_arrondissements[0]}': u[:, 6] + u[:, 7],
+            f'{selected_arrondissements[1]}': u[:, 14] + u[:, 15],
+            f'{selected_arrondissements[2]}': u[:, 22] + u[:, 23],
+        })
 
+        st.write("Affichage du dataframe")
+        st.write(df1)
 
+        # Chargement du fichier Shapefile avec GeoPandas
+ 
+
+ 
+        # Convertir le DataFrame en un format adapté à Plotly Express
+        df_melted = df1.melt(id_vars=["temps"], var_name="NAME_3", value_name="Infections")
+
+        # Fusionner les données d'infection avec les données géographiques des communes
+        gdf_merged = gdf[gdf['NAME_3'].isin(thies_arrondissements)].merge(df_melted, left_on='NAME_3', right_on='NAME_3')
+
+        # Créer la carte choroplèthe animée
+        fig = px.choropleth_mapbox(
+            gdf_merged,
+            geojson=gdf_merged.geometry,
+            locations=gdf_merged.index,
+            color='Infections',
+            animation_frame='temps',
+            color_continuous_scale='reds',
+            mapbox_style="open-street-map",
+            title='Nombres de puces libres infectueuses par arrondissement au fil du temps',
+            labels={'Infections': 'Nombre d\'infections'},
+            center={"lat": gdf_merged['geometry'].centroid.y.mean(), "lon": gdf_merged['geometry'].centroid.x.mean()}
+        )
+
+        # Afficher la carte
+        #fig.show() 
+        st.plotly_chart(fig)
 
     ########################################### Fin de la fonction prague_model ############################################
         return t , u 
@@ -506,7 +542,7 @@ if choose == "modèle":
     temps_final = st.sidebar.slider("temps_final", 0.0, 1000.0, 10.0)
     temps_final = st.sidebar.number_input("temps_final", min_value=0.0, max_value=1000.0, value=temps_final)
     # Champ de saisie pour les valeurs initiales
-    st.sidebar.subheader(" Population initiale")    
+    st.sidebar.subheader(" Population initiale")
     Initial1 = st.sidebar.text_input('Population initiale zone 1 (S1,S2,I1,I2,A1,A2,L1,L2)', value="500,0,50,70,10,20,60,80")
     Initial1 = [float(val.strip()) for val in Initial1.split(',')]
 
