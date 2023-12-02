@@ -7,3 +7,6 @@ pandas
 scipy
 streamlit-folium
 geopandas
+streamlit_lottie
+streamlit_option_menu
+plotly
