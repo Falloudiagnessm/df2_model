@@ -497,7 +497,7 @@ if choose == "modèle":
         })
 
         st.write("Nombres de puces libres infectueuses par arrondissement au fil du temps")
-        st.write(df1)
+        #st.write(df1)
 
         # Chargement du fichier Shapefile avec GeoPandas
  
