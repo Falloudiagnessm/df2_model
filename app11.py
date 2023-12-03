@@ -480,7 +480,7 @@ if choose == "modèle":
             animation_frame='temps',
             color_continuous_scale='reds',
             mapbox_style="open-street-map",
-            title='Nombres d\'infectées des rongeurs par arrondissement au fil du temps',
+            title='Nombres de rongeurs infectés par arrondissement au fil du temps',
             labels={'Infections': 'Nombre d\'infections'},
             center={"lat": gdf_merged['geometry'].centroid.y.mean(), "lon": gdf_merged['geometry'].centroid.x.mean()}
         )
@@ -491,9 +491,9 @@ if choose == "modèle":
         ############################## Pour les puces libre infectueuses ######################
         df1 = pd.DataFrame({
             'temps': t,
-            f'{selected_arrondissements[0]}': u[:, 6] + u[:, 7],
-            f'{selected_arrondissements[1]}': u[:, 14] + u[:, 15],
-            f'{selected_arrondissements[2]}': u[:, 22] + u[:, 23],
+            f'{selected_arrondissements[0]}': results_df1['I1'] + results_df1['I2'],
+            f'{selected_arrondissements[1]}': results_df2['I1'] + results_df2['I2'],
+            f'{selected_arrondissements[2]}': results_df3['I1'] + results_df3['I2']
         })
 
         st.write("Nombres de puces libres infectueuses par arrondissement au fil du temps")
@@ -519,7 +519,7 @@ if choose == "modèle":
             color_continuous_scale='reds',
             mapbox_style="open-street-map",
             title='Nombres de puces libres infectueuses par arrondissement au fil du temps',
-            labels={'Infections': 'Nombre d\'infections'},
+            labels={'Infections': 'Nombre de puces infectueuses'},
             center={"lat": gdf_merged['geometry'].centroid.y.mean(), "lon": gdf_merged['geometry'].centroid.x.mean()}
         )
 
