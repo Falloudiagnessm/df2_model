@@ -458,7 +458,7 @@ if choose == "modèle":
             f'{selected_arrondissements[2]}': u[:, 18] + u[:, 19],
         })
 
-        st.write("Nombres d\' infection de rongeurs pour chaque zone en fonction du temps")
+        #st.write("Nombres d\' infection de rongeurs pour chaque zone en fonction du temps")
         #st.write(df)
 
         # Chargement du fichier Shapefile avec GeoPandas
@@ -496,7 +496,7 @@ if choose == "modèle":
             f'{selected_arrondissements[2]}': results_df3['I1'] + results_df3['I2']
         })
 
-        st.write("Nombres de puces libres infectueuses par arrondissement au fil du temps")
+        #st.write("Nombres de puces libres infectueuses par arrondissement au fil du temps")
         #st.write(df1)
 
         # Chargement du fichier Shapefile avec GeoPandas
