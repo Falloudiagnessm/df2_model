@@ -119,7 +119,7 @@ if choose == "modèle":
     st.markdown(""" <style> .font {
     font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;} 
     </style> """, unsafe_allow_html=True)
-    st.markdown('<p class="font">Modèle de transmission de la peste entre hotes et vecteurs</p>', unsafe_allow_html=True)
+    st.markdown('<p class="font">Modèle mathématique de transmission de la peste entre h\^otes et vecteurs</p>', unsafe_allow_html=True)
      
     #with st.expander(label="Veuillez cliquer pour déplier/replier"):
     
@@ -532,7 +532,7 @@ if choose == "modèle":
     ########################################################################################################################
     ######################################   Interface utilisateur Streamlit (Les Paramettre)  #############################
     ########################################################################################################################
-    #st.title('Modèle de transmission de la peste entre rongeurs et puces')
+    #st.title('Modèle mathématique de transmission de la peste entre rongeurs et puces')
 
     # Widgets d'entrée
     
