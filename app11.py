@@ -210,7 +210,7 @@ if choose == "modèle":
 
 
         # Sélection des arrondissements à afficher
-        selected_arrondissements = st.multiselect("Sélectionnez les arrondissements", thies_arrondissements,default=["Fissel","Sessene","Sindia"])
+        selected_arrondissements = st.multiselect("Sélectionnez les arrondissements (maximum 3)", thies_arrondissements,default=["Fissel","Sessene","Sindia"])
         #arrondissement_data = gdf[(gdf['NAME_1'] == 'Thiès') & (gdf['NAME_3'] == selected_arrondissement)]
   
        
