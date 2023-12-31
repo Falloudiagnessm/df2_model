@@ -838,7 +838,7 @@ elif choose == "Code source":
     st.markdown("""
          Veuillez cliquer sur le lien ci-dessous pour accéder au code source.
 
-        * **Code source:** [https://github.com](https://github.com/AYLY92/memoire/tree/main/code%20source)
+        * **Code source:** [https://github.com/Falloudiagnessm/df2_model](https://github.com/Falloudiagnessm/df2_model)
         """)
     
          
